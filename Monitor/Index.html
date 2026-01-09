@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Monitor NFs - Mercado Livre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        .meli-yellow { background-color: #fff159; }
+        .meli-blue { color: #2d3277; }
+        .bg-meli-blue { background-color: #2d3277; }
+        
+        .step-circle {
+            width: 48px;
+            height: 48px;
+            background-color: #2d3277;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .step-line {
+            position: absolute;
+            left: 24px; /* Metade da largura do círculo */
+            top: 48px;
+            bottom: -24px;
+            width: 2px;
+            background-color: #cbd5e1;
+            z-index: 0;
+        }
+
+        .last-step .step-line { display: none; }
+
+        .image-placeholder {
+            background-color: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+            color: #64748b;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .image-placeholder:hover {
+            border-color: #2d3277;
+            background-color: #e2e8f0;
+        }
+
+        /* Classe utilitária para quando você inserir a imagem real */
+        .real-image {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="meli-yellow shadow-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <i class="fa-solid fa-hand-holding-dollar text-3xl meli-blue"></i>
+                <div>
+                    <div class="text-xs font-bold text-gray-800 uppercase tracking-wider">P2P Financeiro</div>
+                    <h1 class="text-xl font-bold meli-blue leading-none">Monitor de Notas Fiscais</h1>
+                </div>
+            </div>
+            <div class="hidden sm:block text-sm font-medium meli-blue opacity-80">
+                Guia Operacional
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-10">
+
+        <!-- Intro -->
+        <div class="bg-white rounded-xl shadow-sm p-8 mb-10 border-l-8 border-yellow-400">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Objetivo</h2>
+            <p class="text-gray-600 text-lg">
+                Este manual contém o passo a passo para consulta, validação e autorização de pagamentos de Notas Fiscais através da ferramenta Monitor SAP Workzone.
+            </p>
+        </div>
+
+        <!-- Informações Importantes / Visão Geral -->
+        <div class="bg-blue-50 rounded-xl shadow-sm p-8 mb-10 border border-blue-100">
+            <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-circle-info text-blue-600"></i> Informações Importantes
+            </h3>
+            
+            <!-- Parte 1: Texto e Pré-requisitos -->
+            <div class="mb-8">
+                <p class="text-gray-700 mb-4 font-medium">
+                    Antes de iniciar o processo de autorização, verifique os seguintes pontos:
+                </p>
+                            <li class="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm border border-blue-50">
+                                <i class="fa-solid fa-brands fa-jira text-blue-500 text-xl mt-1"></i>
+                                <div>
+                                    <span class="font-bold text-gray-800 block">Exceção:</span>
+                                    <span class="text-sm text-gray-600">Fornecedores que não estiverem cadastrados no monitor, seguiremos com pagamento via <strong>Ticket Jira</strong>.</span>
+                                </div>
+                            </li>
+            </div>
+
+            <!-- Parte 2: Visão Geral / Fluxo (HORIZONTAL) -->
+            <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                <h4 class="font-bold text-gray-700 mb-8 text-center flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-blue-500"></i> Etapas do Processo
+                </h4>
+                
+                <!-- Container Horizontal -->
+                <div class="relative">
+                    <!-- Linha conectora (Aparece só no Desktop) -->
+                    <div class="hidden md:block absolute top-5 left-10 right-10 h-1 bg-gray-200 z-0"></div>
+
+                    <!-- Grid de Passos -->
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+
+                        <!-- 1. FORNECEDOR -->
+                        <div class="relative z-10 flex flex-col items-center text-center">
+                            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center border-4 border-white shadow-sm mb-3">
+                                <i class="fa-solid fa-truck text-xs"></i>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 w-full flex-1 flex flex-col justify-between">
+                                <div>
+                                    <div class="text-[10px] font-bold text-gray-400 uppercase mb-1">FORNECEDOR</div>
+                                    <p class="text-xs text-gray-700 mb-2">Emite a NF e envia para o Engenheiro.</p>
+                                    <div class="text-[10px] text-red-500 font-semibold mb-2 leading-tight">⚠ Importante: Deve estar cadastrado no Monitor.</div>
+                                </div>
+                                <a href="#" class="inline-block text-[10px] text-blue-600 font-bold hover:underline mt-2">
+                                    <i class="fa-solid fa-external-link-alt mr-1"></i> Lista
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 2. ENGENHEIRO -->
+                        <div class="relative z-10 flex flex-col items-center text-center">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border-4 border-white shadow-sm mb-3">
+                                <i class="fa-solid fa-helmet-safety text-xs"></i>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 w-full flex-1">
+                                <div class="text-[10px] font-bold text-blue-500 uppercase mb-1">ENGENHEIRO</div>
+                                <p class="text-xs text-gray-700">Recebe a nota e envia via <strong>Forms de NF</strong> para o time Financeiro.</p>
+                            </div>
+                        </div>
+
+                        <!-- 3. FINANCEIRO -->
+                        <div class="relative z-10 flex flex-col items-center text-center">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center border-4 border-white shadow-sm mb-3">
+                                <i class="fa-solid fa-file-invoice-dollar text-xs"></i>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 w-full flex-1">
+                                <div class="text-[10px] font-bold text-purple-500 uppercase mb-1">FINANCEIRO</div>
+                                <p class="text-xs text-gray-700">Tratamento das notas no monitor (se a NF estiver no forms).</p>
+                            </div>
+                        </div>
+
+                        <!-- 4. MONITOR (SISTEMA) -->
+                        <div class="relative z-10 flex flex-col items-center text-center">
+                            <div class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center border-4 border-white shadow-sm mb-3">
+                                <i class="fa-solid fa-desktop text-xs"></i>
+                            </div>
+                            <div class="bg-yellow-50 p-3 rounded border border-yellow-100 w-full flex-1 flex flex-col justify-between">
+                                <div>
+                                    <div class="text-[10px] font-bold text-yellow-600 uppercase mb-1">MONITOR</div>
+                                    <p class="text-xs text-gray-700 mb-2">Status: <strong>Aguardando confirmação</strong></p>
+                                </div>
+                                <a href="https://meli-prd.workzone.cfapps.us10.hana.ondemand.com/site#notasfiscalesbr-display?sap-app-origin-hint=&sap-ui-app-id-hint=saas_approuter_meli.p2p.monitordenotasfiscalesbr&/000015412&/" target="_blank" class="inline-block text-[10px] bg-blue-600 text-white px-2 py-1.5 rounded hover:bg-blue-700 mt-2">
+                                    Acessar Monitor
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 5. ENGENHEIRO (AÇÃO) -->
+                        <div class="relative z-10 flex flex-col items-center text-center">
+                            <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center border-4 border-white shadow-sm mb-3">
+                                <i class="fa-solid fa-check text-xs"></i>
+                            </div>
+                            <div class="bg-green-50 p-3 rounded border border-green-100 w-full flex-1">
+                                <div class="text-[10px] font-bold text-green-600 uppercase mb-1">ENGENHEIRO</div>
+                                <p class="text-xs text-gray-700 font-bold">Ação: Confirmar Pagamento</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Steps Container (Largura original restaurada para o resto do conteúdo) -->
+        <div class="max-w-4xl mx-auto space-y-6">
+
+            <!-- PASSO 1 -->
+            <div class="relative pl-0 md:pl-4">
+                <!-- Linha conectora -->
+                <div class="hidden md:block step-line"></div>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="hidden md:flex step-circle">1</div>
+                    
+                    <div class="flex-1 bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 mb-4 md:hidden">
+                            <div class="step-circle !w-10 !h-10 !text-lg">1</div>
+                            <h3 class="text-xl font-bold text-gray-800">Acessar o Monitor</h3>
+                        </div>
+                        <h3 class="hidden md:block text-xl font-bold text-gray-800 mb-4">Acessar o Monitor</h3>
+
+                        <ul class="space-y-3 mb-6 text-gray-600">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-link mt-1 text-blue-600"></i>
+                                <span><strong>Link Oficial:</strong> Acesse o endereço do Monitor SAP Workzone.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-user-shield mt-1 text-blue-600"></i>
+                                <span><strong>Login SSO:</strong> Utilize sua conta corporativa MeLi.</span>
+                            </li>
+                        </ul>
+
+                        <!-- ÁREA DE IMAGEM 1 -->
+                        <div class="image-placeholder">
+                           <span class="text-sm">Exemplo:</span>
+                            <br>
+                            <span class="font-bold"><img src="Imgs/Monitr.png" alt=""></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSO 2 -->
+            <div class="relative pl-0 md:pl-4">
+                <div class="hidden md:block step-line"></div>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="hidden md:flex step-circle">2</div>
+                    
+                    <div class="flex-1 bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 mb-4 md:hidden">
+                            <div class="step-circle !w-10 !h-10 !text-lg">2</div>
+                            <h3 class="text-xl font-bold text-gray-800">Preenchimento dos Filtros</h3>
+                        </div>
+                        <h3 class="hidden md:block text-xl font-bold text-gray-800 mb-4">Preenchimento dos Filtros</h3>
+
+                        <p class="text-gray-600 mb-6">Para localizar a pendência, preencha obrigatoriamente os campos na barra superior:</p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-gray-50 p-4 rounded-lg border text-center">
+                                <i class="fa-solid fa-cart-shopping text-2xl meli-blue mb-2"></i>
+                                <div class="font-bold text-sm">Ordem de Compra</div>
+                                <div class="text-xs text-gray-500">Insira o Nº do Pedido</div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border text-center">
+                                <i class="fa-solid fa-file-invoice-dollar text-2xl meli-blue mb-2"></i>
+                                <div class="font-bold text-sm">Número da NF</div>
+                                <div class="text-xs text-gray-500">Digite o Nº da Nota</div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border text-center">
+                                <i class="fa-solid fa-magnifying-glass text-2xl meli-blue mb-2"></i>
+                                <div class="font-bold text-sm">Ação</div>
+                                <div class="text-xs text-gray-500">Clique em Consultar</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSO 3 (CRÍTICO) -->
+            <div class="relative pl-0 md:pl-4">
+                <div class="hidden md:block step-line"></div>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="hidden md:flex step-circle bg-yellow-500 text-blue-900 border-2 border-blue-900">3</div>
+                    
+                    <div class="flex-1 bg-white p-6 rounded-xl shadow-md border-t-4 border-yellow-400">
+                        <div class="flex items-center gap-3 mb-4 md:hidden">
+                            <div class="step-circle !w-10 !h-10 !text-lg bg-yellow-500 text-blue-900">3</div>
+                            <h3 class="text-xl font-bold text-gray-800">Verificação de Status</h3>
+                        </div>
+                        <h3 class="hidden md:block text-xl font-bold text-gray-800 mb-2">Verificação de Status</h3>
+
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 rounded-r">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fa-solid fa-triangle-exclamation text-yellow-600 text-xl"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-bold text-yellow-800">Regra de Ouro</h3>
+                                    <div class="mt-2 text-sm text-yellow-700">
+                                        <p>Apenas realize a ação se o status estiver <strong>exatamente</strong> como:</p>
+                                        <span class="inline-block mt-2 bg-blue-100 text-blue-800 px-3 py-1 rounded font-bold border border-blue-200">
+                                            Aguardando confirmação
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ÁREA DE IMAGEM 2 -->
+                        <div class="image-placeholder">
+                            <span class="text-sm">Exemplo:</span>
+                            <br>
+                            <span class="font-bold"><img src="Imgs/Aguardando.png" alt=""></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSO 4 -->
+            <div class="relative pl-0 md:pl-4">
+                <div class="hidden md:block step-line"></div>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="hidden md:flex step-circle">4</div>
+                    
+                    <div class="flex-1 bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 mb-4 md:hidden">
+                            <div class="step-circle !w-10 !h-10 !text-lg">4</div>
+                            <h3 class="text-xl font-bold text-gray-800">Executar Confirmação</h3>
+                        </div>
+                        <h3 class="hidden md:block text-xl font-bold text-gray-800 mb-4">Executar Confirmação</h3>
+
+                        <ol class="list-decimal list-inside space-y-3 mb-6 text-gray-700 font-medium">
+                            <li class="p-2 bg-gray-50 rounded">
+                                <span class="ml-2">Selecione a Nota na <strong>caixa de seleção (checkbox)</strong> à esquerda.</span>
+                            </li>
+                            <li class="p-2 bg-gray-50 rounded">
+                                <span class="ml-2">Clique no botão <strong>Confirmar</strong>.</span>
+                            </li>
+                        </ol>
+
+                        <!-- ÁREA DE IMAGEM 3 -->
+                        <div class="image-placeholder">
+                            <span class="text-sm">Exemplo:</span>
+                            <br>
+                            <span class="font-bold"><img src="Imgs/Confirmação.png" alt=""></span>                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONCLUSÃO -->
+            <div class="relative pl-0 md:pl-4 last-step">
+                <div class="hidden md:block step-line"></div>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="hidden md:flex step-circle bg-green-500"><i class="fa-solid fa-check text-white"></i></div>
+                    
+                    <div class="flex-1 bg-green-50 p-8 rounded-xl border border-green-200 text-center">
+                        <i class="fa-solid fa-circle-check text-6xl text-green-500 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-green-800 mb-2">Processo Finalizado!</h2>
+                        <p class="text-green-700 max-w-lg mx-auto">
+                            Verifique se o status mudou na listagem. Se alterado, basta aguardar a confirmação final da NF conforme o prazo de vencimento.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer / Dúvidas -->
+    <footer class="bg-gray-800 text-white py-12 mt-10">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h3 class="text-2xl font-bold mb-4">Dúvidas?</h3>
+            
+            <a href="https://wa.me/11934509161" class="inline-flex items-center gap-2 bg-white text-gray-900 px-6 py-3 rounded-full font-bold hover:bg-yellow-400 transition-colors">
+            <i class="fa-brands fa-whatsapp"></i>
+                Entre em contato com a equipe financeira</a>
+            
+            <div class="mt-10 border-t border-gray-700 pt-6 text-xs text-gray-500">
+                &copy; 2026 Mercado Livre - Departamento Financeiro
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
